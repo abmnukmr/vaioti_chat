@@ -13,8 +13,8 @@
 <img src="assets/image/abmnu.jpg" style="width: 10%;height: 10%;border-radius: 50% 50% 50% 50%;margin-top:2%;">
   <ion-col style="height: 10%; padding: 0%;">
 
-    <p style="color: #cb1b58;margin-top:8%;margin-left: 3%;padding: 0%;font-size: 12px; position:absolute">online</p>
-  <p style="color: #cb1b58;margin-top:2%;margin-left: 3%;padding: 0%; "><b>Abhimanyu Kumar</b></p>
+    <p style="color: #cb1b58;margin-top:8%;margin-left: 3%;padding: 0%;font-size: 12px; position:absolute"> Online {{type}} </p>
+  <p style="color: #cb1b58;margin-top:2%;margin-left: 3%;padding: 0%; "><b>{{user_name}}</b></p>
   </ion-col>
 </ion-row>
 
@@ -25,21 +25,18 @@
 
 <ion-content no-padding>
 
+  <div  *ngFor="let  chat of chats" style="margin-top: 0%;margin-bottom: 0%;padding-top: 0%;padding-bottom: 0%;">
   <!--- message part-->
 
-  <ion-chip  style="margin-left: 40%;margin-top: 2%;" [hidden]="false">
-    <ion-label>08 July,2017</ion-label>
-  </ion-chip><br>
 
   <!-- itration module -->
 
 
-
   <!-- right side module start -->
-  <div  style="direction:rtl; width: auto; padding-bottom:2%;"  [hidden]="false">
+  <div  style="direction:rtl; width: auto; padding-bottom:1%;"  [hidden]="chat.user==user_name? false:true">
     <ion-row>
     <div class="rightalign">
-      <p style="margin-top:2%;margin-bottom: 2%;  color: rgb(255,255,255);text-align:left; display: inline-block"> Hii manyu </p>
+      <p style="margin-top:2%;margin-bottom: 2%; height: auto;  color: rgb(255,255,255);text-align:left; display: inline-block"> {{chat.message}} </p>
     </div>
     <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
     <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:0%; font-size: 9px;"></ion-icon>
@@ -50,41 +47,14 @@
 
 
 
-  <!-- right side module start -->
-  <div  style="direction:rtl; width: auto; padding-bottom:2%;" [hidden]="false" >
-    <ion-row>
-      <div class="rightalign">
-        <p style="margin-top:2%;margin-bottom: 2%;  color: rgb(255,255,255);text-align:inherit; display: inline-block;text-align-last:right;"> :How are you  </p>
-      </div>
-      <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
-      <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:0%; font-size: 9px;"></ion-icon>
-    </ion-row>
-  </div>
-  <!--  right side module end -->
-
-
-
-  <!-- right side module start -->
-  <div  style="direction:rtl; width: auto; padding-bottom:2%;"  [hidden]="false">
-    <ion-row>
-      <div class="rightalign">
-        <p style="margin-top:2%;margin-bottom: 2%;  color: rgb(255,255,255);text-align:left; display: inline-block"> is it working ? fine</p>
-      </div>
-      <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
-      <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:0%; font-size: 9px;"></ion-icon>
-    </ion-row>
-  </div>
-  <!--  right side module end -->
-
-
 
 
 
   <!-- left side module start -->
-    <div style="direction: ltr;" [hidden]="false">
+    <div style="direction: ltr;" [hidden]="chat.user==user_name? true:false">
       <ion-row>
       <div class="leftalign">
-          <p style="margin-top:2%;margin-bottom: 2%;  color: rgba(66,50,70,0.8);text-align:left; display: inline-block"> is it working ?</p>
+          <p style="margin-top:2%;margin-bottom: 2%; height: auto; color: rgba(66,50,70,0.8);text-align:left; display: inline-block"> {{chat.message}}</p>
       </div>
 
       <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
@@ -98,7 +68,7 @@
 
 
   <!-- left side image module start -->
-  <div style="direction: ltr;" [hidden]="false">
+  <div style="direction: ltr;" [hidden]="clint_image">
     <ion-row>
       <div class="leftalign_imgae">
 
@@ -116,26 +86,11 @@
   <!-- left side module  image start -->
 
 
-  <!-- left side image module start -->
-  <div style="direction: ltr;" [hidden]="false" [hidden]="false">
-    <ion-row>
-      <div class="leftalign_imgae">
-        <img src="../../assets/image/whete.jpg"  height="100%" width="100%;" />
-      </div>
-      <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
-      <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:1%; font-size: 9px;"></ion-icon><br>
-
-      <ion-icon name="ios-download-outline"  style="margin-top: 20%;"></ion-icon>
-    </ion-row>
-  </div>
-
-  <!-- left side module  image start -->
-
 
 
 
   <!-- right side image module start -->
-  <div  style="direction:rtl;" [hidden]="false" >
+  <div  style="direction:rtl;" [hidden]="self_image" >
     <ion-row>
       <div class="rightalign_image">
         <img src="../../assets/image/chat_image.jpeg"  height="100%" width="100%;" />
@@ -149,36 +104,8 @@
 
 
 
-  <!-- right side module start -->
-  <div  style="direction:rtl; width: auto; padding-bottom:2%;"  [hidden]="false">
-    <ion-row>
-      <div class="rightalign">
-        <p style="margin-top:2%;margin-bottom: 2%;  color: rgb(255,255,255);text-align:left; display: inline-block"> is it working ? fine</p>
-      </div>
-      <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
-      <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:0%; font-size: 9px;"></ion-icon>
-    </ion-row>
-  </div>
-  <!--  right side module end -->
 
 
-
-
-
-  <!-- left side module start -->
-  <div style="direction: ltr;" [hidden]="false">
-    <ion-row>
-      <div class="leftalign">
-        <p style="margin-top:2%;margin-bottom: 2%;  color: rgba(66,50,70,0.8);text-align:left; display: inline-block"> is it working ?</p>
-      </div>
-
-      <p  style="margin-top:3%;margin-bottom: 0%;  font-size:7px; text-align:left">12:38</p>
-      <ion-icon name="ios-eye-outline"  color="primary" style="float:right;margin-top:3%;margin-bottom: 0%; margin-right:1%; font-size: 9px;"></ion-icon>
-
-    </ion-row>
-  </div>
-
-  <!-- left side module start -->
 
 
 
@@ -186,6 +113,12 @@
   <!-- message end-->
 
 
+  </div>
+
+
+  <ion-chip  style="margin-left: 40%;margin-top: 2%;" [hidden]="true">
+    <ion-label>08 July,2017</ion-label>
+  </ion-chip><br>
 
 
 </ion-content>
@@ -196,14 +129,17 @@
 
     <div class="sendtext">
       <ion-row>
-        <ion-input   class="item-wrapper" type="text"></ion-input>
+        <ion-textarea  fz-elastic class="item-wrapper" type="text" [(ngModel)]="message" (keyup)="typing()"></ion-textarea>
         <ion-icon name="ios-camera-outline" color="primary" style="margin-top: 3%;margin-right: 3%;height: 20px;width: 20px; " > </ion-icon>
       </ion-row>
     </div>
 
-    <div class="sendbutton">
-      <ion-icon name="send" color="light" style="margin-left: 27%;margin-top:27% " > </ion-icon>
+    <div class="sendbutton" (click)="send()">
+      <ion-icon name="send" color="light" style="margin-left: 27%;margin-top:27% "  > </ion-icon>
     </div>
+
+
+    <ion-input  [(ngModel)]="user_name" style="margin-top: 40%" placeholder="user"></ion-input>
   </ion-toolbar>
 </ion-footer>
 
