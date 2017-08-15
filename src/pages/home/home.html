@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Chat
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -12,15 +12,15 @@
   <ion-list>
     <ion-item *ngFor="let item of user" (click)="gotochatbot(item.name,item.image,item.email)">
       <ion-avatar item-start>
-        <img src="{{item.email}}">
+        <img [src]='item.image'>
       </ion-avatar>
       <h2>{{item.name}}</h2>
       <p>{{item.email}}</p>
     </ion-item>
   </ion-list>
 
-</ion-content>
 
-<ion-footer>
+</ion-content>
+  <ion-footer>
 
 </ion-footer>
