@@ -1,8 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
-import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Component, NgZone, ViewChild} from '@angular/core';
+import {Content, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import * as io from 'socket.io-client';
 import * as moment from 'moment'
-import {EmojiEvent} from "@ionic-tools/emoji-picker";
+import PouchDB from 'pouchdb';
+import {ChatbotsProvider} from "../../providers/chatbots/chatbots";
+
+//import {EmojiEvent} from "@ionic-tools/emoji-picker";
 /**
  * Generated class for the ChatbotPage page.
  *
@@ -22,6 +25,8 @@ export class ChatbotPage {
  socket:any;
  showif:boolean=true;
  chats=[];
+  db:any;
+   dt:any;
   toggled: boolean = false;
   message:any;
  self_text:boolean=true;
@@ -30,31 +35,43 @@ export class ChatbotPage {
  clint_image:boolean=true;
  msg:any;
  chatbox:any;
+ count:any=0;
+
+  scrollAmount:any=0;
 
  type:any;
- user_name;
+ user_name:any="Abhimanyu";
   url:any;
   @ViewChild(Content)content: Content;
 
   @ViewChild('textarea')textarea;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public vctRl:ViewController,public zone:NgZone,public pchat:ChatbotsProvider) {
 
+    this.setupdb();
+    this.getdata();
     this.getchatdata();
-   console.log(this.url)
+
+    //console.log(this.url)
     this.socket = io('https://vioti.herokuapp.com/');
+
+
     this.socket.emit('socketjoined',this.email)
 
-    this.socket.on('message', (msg) => {
-      console.log("message", msg);
-      if(msg.user=="abmnu") this.self_text=false;
-      this.ScrollToBottom();
+    this.socket.on('gettomessage', (msg) => {
+      if(msg!= null) {
 
-      //this.linkify(msg);
-      this.showif=false;
-      this.chats.push(msg);
-      this.chatbox=JSON.stringify(this.chats);
-      console.log(this.chats);
+          console.log("message", msg.email);
+          console.log("check");
+
+        this.chats.push(msg);
+
+        this.addata(msg);
+
+        console.log(this.chats);
+
+
+      }
     });
 
 
@@ -68,7 +85,25 @@ export class ChatbotPage {
   }
 
 
+
   ionviewWillEnter(){
+
+   // this.getdata();
+  }
+
+
+  oncan(){
+
+    this.socket.on("closed",function (msg) {
+      console.log(msg)
+    })
+    this.socket.off();
+    this.socket.disconnect();
+    this.socket = null;
+    console.log("cross")
+    this.vctRl.dismiss()
+
+
 
   }
 
@@ -76,16 +111,15 @@ export class ChatbotPage {
 
   typing()
   {
-     this.ScrollToBottom();
+    this.ScrollToBottom();
     this.msg={
       "type":"Typing...",
-
     }
     this.socket.emit('typing', this.msg);
+
     setTimeout(() => {
       this.msg={
         "type":"",
-
       }
       this.socket.emit('typing', this.msg);
     },1000);
@@ -95,17 +129,23 @@ export class ChatbotPage {
   ScrollToBottom() {
     setTimeout(() => {
       this.content.scrollToBottom();
-    });
+    },400);
+  }
+  scro(){
+    setTimeout(() => {
+      this.content.scrollToBottom(200);
+    },400);
   }
   send() {
     this.msg={
       "user":this.user_name,
       "email":this.email,
       "message":this.message,
-      "time":moment().format('LT')
+      "time":moment().format('LT'),
+      "tid":Date.now()
   }
     if(this.message != ''  ){
-      this.socket.emit('message', this.msg);
+      this.socket.emit('gettomessage', this.msg);
     }
     else {
 
@@ -115,24 +155,29 @@ export class ChatbotPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ChatbotPage');
-  }
+   // this.scro();
+     }
 getchatdata(){
    this.name= this.navParams.get("name")
     this.email=this.navParams.get("email")
     this.image=this.navParams.get("image")
-
+     //this.user_name="abmnukmr";
 
 }
 
 goback(){
   this.navCtrl.pop();
+
+   this.socket.on("closed",function (msg) {
+     console.log(msg)
+   })
+ }
+
+po(msg){
+  this.chats.push(msg);
+
 }
 
-  handleSelection(event) {
-    this.message=  event.char+ " " +this.message;
-
-  }
 
 setfo(){
   setTimeout(() => {
@@ -141,5 +186,58 @@ setfo(){
 
   },400);
 }
+
+
+
+
+  setupdb(){
+    this.db = new PouchDB('coolpad');
+  }
+
+
+
+
+  getdata(){
+    //this.setupdb();
+    this.db.allDocs({include_docs:true},(err,result)=>{
+      if(!err){
+        let  rows=result.rows;
+        for(let i=0;i<rows.length;i++){
+          this.chats.push(rows[i].doc)
+        }
+        console.log(this.chats);
+      }
+    })
+  }
+
+  logging(){
+    console.log("Sala Chutiyapa");
+  }
+
+
+  addata(msg)
+  {
+    //this.chats.push(msg);
+
+    var item=[msg]
+    this.db.bulkDocs( {"docs":item}, (err, result) => {
+      if (!err) {
+
+        this.ScrollToBottom();
+        console.log("Successfully Added");
+
+        console.log(result);
+         return null;
+         }
+      else {
+        console.log(err)
+      }
+
+    })
+
+  }
+
+
+
 
 }

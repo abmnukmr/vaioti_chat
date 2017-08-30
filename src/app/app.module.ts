@@ -10,6 +10,9 @@ import {ChatbotPage} from "../pages/chatbot/chatbot";
 import { LinkifyPipe } from '../pipes/linkify/linkify';
 import { ElasticModule } from 'angular2-elastic';
 import {EmojiPickerModule} from "@ionic-tools/emoji-picker";
+import {LocalstorgaePage} from "../pages/localstorgae/localstorgae";
+import { OrderByPipe } from '../pipes/order-by/order-by';
+import { ChatbotsProvider } from '../providers/chatbots/chatbots';
 
 
 @NgModule({
@@ -17,7 +20,11 @@ import {EmojiPickerModule} from "@ionic-tools/emoji-picker";
     MyApp,
     HomePage,
     ChatbotPage,
-    LinkifyPipe
+    LinkifyPipe,
+    LocalstorgaePage,
+    OrderByPipe
+
+
   ],
   imports: [
     BrowserModule,
@@ -30,13 +37,15 @@ import {EmojiPickerModule} from "@ionic-tools/emoji-picker";
     MyApp,
     HomePage,
     ChatbotPage,
+    LocalstorgaePage
 
 
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ChatbotsProvider
   ]
 })
 export class AppModule {}
