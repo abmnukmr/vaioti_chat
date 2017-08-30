@@ -47,10 +47,9 @@ export class ChatbotPage {
   @ViewChild('textarea')textarea;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public vctRl:ViewController,public zone:NgZone,public pchat:ChatbotsProvider) {
-
-    this.setupdb();
-    this.getdata();
     this.getchatdata();
+
+    this.getdata();
 
     //console.log(this.url)
     this.socket = io('https://vioti.herokuapp.com/');
@@ -107,6 +106,18 @@ export class ChatbotPage {
 
   }
 
+  ionViewWillLeave(){
+
+    this.socket.on("closed",function (msg) {
+      console.log(msg)
+    })
+    this.socket.off();
+    this.socket.disconnect();
+    //this.socket = null;
+    console.log("cross")
+
+  }
+
 
 
   typing()
@@ -140,7 +151,7 @@ export class ChatbotPage {
     this.msg={
       "user":this.user_name,
       "email":this.email,
-      "message":this.message,
+      "message":this.message +" ",
       "time":moment().format('LT'),
       "tid":Date.now()
   }
@@ -162,6 +173,7 @@ getchatdata(){
     this.email=this.navParams.get("email")
     this.image=this.navParams.get("image")
      //this.user_name="abmnukmr";
+  this.setupdb(this.email);
 
 }
 
@@ -190,8 +202,8 @@ setfo(){
 
 
 
-  setupdb(){
-    this.db = new PouchDB('coolpad');
+  setupdb(db){
+    this.db = new PouchDB(db);
   }
 
 
