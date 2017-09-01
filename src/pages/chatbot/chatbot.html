@@ -23,7 +23,7 @@
 </ion-header>
 
 
-<ion-content  style="padding-bottom:20%; height: 90%;  display: flex;
+<ion-content  style="padding-bottom:20%; height: 90%; background-color:rgb(226,226,226); display: flex;
     flex-flow: column-reverse wrap;" [scrollDownOnLoad]="true"  >
   <div  *ngFor="let  chat of chats |orderBy :['+tid'] " style="margin-top: 0%;margin-bottom: 0%;padding-top: 0%;padding-bottom: 0%;">
 
@@ -122,7 +122,7 @@
   </ion-chip><br>
 </ion-content>
 
-  <ion-row >
+  <ion-row style="background-color:#b6bab7; ">
 
     <div  class="sendtext"  >
       <ion-row (click)="setfo()" style="padding-top:0%; ">
@@ -139,7 +139,7 @@
       </ion-row>
     </div>
 
-    <div>
+    <div style="background-color:#b6bab7; ">
       <ion-fab right  style="bottom:0.5%; right: 0%;" >
         <button ion-fab mini  (click)="send()" > <ion-icon name="send" ></ion-icon></button>
       </ion-fab>

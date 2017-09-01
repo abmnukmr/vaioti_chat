@@ -47,10 +47,12 @@ export class ChatbotPage {
   @ViewChild('textarea')textarea;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public vctRl:ViewController,public zone:NgZone,public pchat:ChatbotsProvider) {
+
     this.getchatdata();
 
     this.getdata();
 
+    this.ScrollToBottom();
     //console.log(this.url)
     this.socket = io('https://vioti.herokuapp.com/');
 
@@ -125,12 +127,14 @@ export class ChatbotPage {
     this.ScrollToBottom();
     this.msg={
       "type":"Typing...",
+       "email":this.email
     }
     this.socket.emit('typing', this.msg);
 
     setTimeout(() => {
       this.msg={
         "type":"",
+        "email":this.email
       }
       this.socket.emit('typing', this.msg);
     },1000);
@@ -152,6 +156,9 @@ export class ChatbotPage {
       "user":this.user_name,
       "email":this.email,
       "message":this.message +" ",
+      "image":"",
+      "docs":"",
+      "notification_token":"",
       "time":moment().format('LT'),
       "tid":Date.now()
   }
