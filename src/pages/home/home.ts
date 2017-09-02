@@ -3,6 +3,8 @@ import {ModalController, NavController} from 'ionic-angular';
 import {ChatbotPage} from "../chatbot/chatbot";
 import {LocalstorgaePage} from "../localstorgae/localstorgae";
 import PouchDB from 'pouchdb';
+import * as io from 'socket.io-client';
+
 
 @Component({
   selector: 'page-home',
@@ -14,25 +16,83 @@ export class HomePage {
   lastmessage:string="";
   Lastarray=[];
   val:any;
+  socket:any;
+  recmail:any="";
+  type:any="";
   user:any=[{"name":"ABhimanyu","image":"assets/image/abmnu.jpg","email":"abmnukmr@gmail.com"},{"name":"Davis Deep","image":"assets/image/dp.png","email":"davis_deep@gmail.com"},{"name":"Rohit Nandan","image":"assets/image/dp.png","email":"nandan_rohit@gmail.com"},{"name":"Sumit Singh","image":"assets/image/dp.png","email":"sumit007@gmail.com"}]
   constructor(public navCtrl: NavController,public Mdl:ModalController) {
+    this.socket = io('https://vioti.herokuapp.com/');
+
+  this.join();
+    this.refresh();
 
 
-  this.refresh();
+
+
+    this.socket.on('gettomessage', (msg) => {
+      if(msg!= null) {
+        var index =this.user.findIndex(function(item, i){
+          return item.email === msg.email
+        })
+
+         this.user[index].message
+        this.socket.emit('socketjoined',msg.email)
+
+        console.log("message", msg.email);
+        console.log("check");
+
+
+
+      }
+    });
+
+
+
+    this.socket.on('typingrec', (msg) => {
+      this.type=msg.type;
+      this.recmail=msg.email
+      console.log(this.type)
+    });
+
+
 
   }
 
 
-  refresh(){
+join(){
+    for(let i=0; i<this.user.length; i++){
+      this.socket.emit('socketjoined',this.user[i].email)
+
+    }
+}
+
+
+
+
+
+
+
+refresh(){
     for(let i=0; i<this.user.length;i++)
     {
       var fi=this.getdata(this.user[i].email)
-      var t=this.hoto()
+
       //this.Lastarray.push(this.getdata(this.user[i].email))
-      console.log(fi+"gettig"+t+this.lastmessage);
 
     }
-    console.log(this.Lastarray);
+
+  }
+
+  dore(){
+    this.Lastarray=[];
+    for(let i=0; i<this.user.length;i++)
+    {
+      var fi=this.getdata(this.user[i].email)
+
+      //this.Lastarray.push(this.getdata(this.user[i].email))
+
+    }
+
   }
 
   gotochatbot(name,image,email){
@@ -40,8 +100,7 @@ export class HomePage {
 
     let profileModal = this.Mdl.create(ChatbotPage,{"name":name,"image":image,"email":email});
     profileModal.onDidDismiss(data => {
-      this.Lastarray=[]
-      this.refresh();
+      this.dore();
       console.log("hiiii");
     });
     profileModal.present();
@@ -83,9 +142,10 @@ export class HomePage {
 
             as =gi.doc.message;
             this.lastmessage=as;
-           console.log(as);
+           console.log(gi.doc);
 
-        this.Lastarray.push(as)
+
+        this.Lastarray.push(gi.doc)
       }
     })
 

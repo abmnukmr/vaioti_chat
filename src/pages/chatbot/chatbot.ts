@@ -2,6 +2,7 @@ import {Component, NgZone, ViewChild} from '@angular/core';
 import {Content, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import * as io from 'socket.io-client';
 import * as moment from 'moment'
+
 import PouchDB from 'pouchdb';
 import {ChatbotsProvider} from "../../providers/chatbots/chatbots";
 
@@ -76,7 +77,7 @@ export class ChatbotPage {
     });
 
 
-    this.socket.on('typing', (msg) => {
+    this.socket.on('typingrec', (msg) => {
      this.type=msg.type;
      console.log(this.type)
     });
@@ -131,12 +132,17 @@ export class ChatbotPage {
     }
     this.socket.emit('typing', this.msg);
 
+
+
+
     setTimeout(() => {
       this.msg={
         "type":"",
         "email":this.email
       }
       this.socket.emit('typing', this.msg);
+
+
     },1000);
 
   }
@@ -153,10 +159,10 @@ export class ChatbotPage {
   }
   send() {
     this.msg={
-      "user":this.user_name,
+      "user":this.name,
       "email":this.email,
       "message":this.message +" ",
-      "image":"",
+      "image":"http://www.iconsfind.com/wp-content/uploads/2016/10/20161014_58006bff8b1de.png",
       "docs":"",
       "notification_token":"",
       "time":moment().format('LT'),
